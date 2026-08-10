@@ -50,6 +50,7 @@ SECTIONS {
         src/code_80001DC.o(.text);
         src/arm_funcs.o(.text);
         src/main_loops.o(.text);
+        src/story_mode.o(.text);
         src/event_flag.o(.text);
         src/gba_color_util.o(.text);
         src/pixelpos_math.o(.text);

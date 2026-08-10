@@ -46,6 +46,7 @@
 #include "save.h"
 #include "save_read.h"
 #include "sprite.h"
+#include "story_mode.h"
 #include "string_format.h"
 #include "text_1.h"
 #include "text_2.h"
@@ -1102,6 +1103,11 @@ static u32 xxx_script_related_8001334_Async(u32 startMode)
 static void LoadAndRunDungeon_Async(DungeonSetupStruct *setupPtr)
 {
     nullsub_2(setupPtr);
+    if (StoryMode_ShouldSkipDungeon(setupPtr)) {
+        StoryMode_CompleteSkippedDungeon(setupPtr);
+        return;
+    }
+
     RunDungeon_Async(setupPtr);
     NDS_LoadOverlay_GroundMain();
 }
