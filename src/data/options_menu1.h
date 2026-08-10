@@ -20,4 +20,6 @@ static const WindowTemplate sUnknown_80DBFCC = {
 ALIGNED(4) static const u8 sOthers[] = _("Others");
 ALIGNED(4) static const u8 sChangeSettingsPrompt[] = _("Change settings?");
 ALIGNED(4) static const u8 sGameOptions[] = _("Game Options");
+ALIGNED(4) static const u8 sStoryModeOn[] = _("Story: On");
+ALIGNED(4) static const u8 sStoryModeOff[] = _("Story: Off");
 ALIGNED(4) static const u8 sHints[] = _("Hints");

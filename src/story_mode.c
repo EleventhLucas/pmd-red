@@ -2,11 +2,26 @@
 #include "story_mode.h"
 #include "constants/dungeon.h"
 
-#define STORY_MODE_SKIP_DUNGEONS 1
+static EWRAM_INIT bool8 sStoryModeSkipDungeons = TRUE;
+
+void StoryMode_ResetRuntimeState(void)
+{
+    sStoryModeSkipDungeons = TRUE;
+}
+
+bool8 StoryMode_IsDungeonSkipEnabled(void)
+{
+    return sStoryModeSkipDungeons;
+}
+
+void StoryMode_ToggleDungeonSkip(void)
+{
+    sStoryModeSkipDungeons = !sStoryModeSkipDungeons;
+}
 
 bool8 StoryMode_ShouldSkipDungeon(const DungeonSetupStruct *setupPtr)
 {
-    if (!STORY_MODE_SKIP_DUNGEONS)
+    if (!sStoryModeSkipDungeons)
         return FALSE;
 
     if (setupPtr->info.sub0.unk4)

@@ -9,6 +9,7 @@
 #include "menu_input.h"
 #include "options_menu1.h"
 #include "options_menu2.h"
+#include "story_mode.h"
 #include "string_format.h"
 #include "text_1.h"
 
@@ -17,6 +18,7 @@ enum
     MENU_OPTION_DEFAULT = 1,
     MENU_OPTION_HINTS,
     MENU_OPTION_GAMEOPTIONS,
+    MENU_OPTION_STORY_MODE,
     MENU_OPTION_YES,
     MENU_OPTION_NO
 };
@@ -184,6 +186,10 @@ static void CreateOthersMenu(void)
     sUnknown_203B25C->menuItems[loopMax].menuAction = MENU_OPTION_GAMEOPTIONS;
 
     loopMax++;
+    sUnknown_203B25C->menuItems[loopMax].text = StoryMode_IsDungeonSkipEnabled() ? sStoryModeOn : sStoryModeOff;
+    sUnknown_203B25C->menuItems[loopMax].menuAction = MENU_OPTION_STORY_MODE;
+
+    loopMax++;
     sUnknown_203B25C->menuItems[loopMax].text = sHints;
     sUnknown_203B25C->menuItems[loopMax].menuAction = MENU_OPTION_HINTS;
 
@@ -228,6 +234,10 @@ static void HandleOthersMenu(void)
             break;
         case MENU_OPTION_GAMEOPTIONS:
             SetOptionsMenuState(6);
+            break;
+        case MENU_OPTION_STORY_MODE:
+            StoryMode_ToggleDungeonSkip();
+            SetOptionsMenuState(OPTIONS_MENU_MAIN);
             break;
         case MENU_OPTION_DEFAULT:
             SetOptionsMenuState(OPTIONS_MENU_EXIT);

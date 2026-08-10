@@ -2,6 +2,7 @@
 #include "globaldata.h"
 #include "game_options.h"
 #include "graphics_memory.h"
+#include "story_mode.h"
 #include "data_serializer.h"
 
 EWRAM_INIT GameOptions *gGameOptionsRef = {NULL};
@@ -19,6 +20,7 @@ GameOptions * GetGameOptions(void)
 
 void InitializeGameOptions(bool8 initializeGender)
 {
+    StoryMode_ResetRuntimeState();
     gGameOptionsRef->windowColor = WINDOW_COLOR_BLUE;
     if(initializeGender)
     {
@@ -150,6 +152,8 @@ void WriteGameOptionsBits(DataSerializer *param_1)
 void ReadGameOptionsBits(DataSerializer *param_1)
 {
     u8 byteArray[4];
+    StoryMode_ResetRuntimeState();
+
     ReadBits(param_1, byteArray, 2);
     gGameOptionsRef->windowColor  = byteArray[0] & NUM_WINDOW_COLORS;
 
@@ -297,4 +301,3 @@ UNUSED static u32 sub_8094D24(void)
 {
     return 0;
 }
-
