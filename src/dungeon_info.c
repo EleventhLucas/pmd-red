@@ -10,6 +10,7 @@
 #include "moves.h"
 #include "pokemon.h"
 #include "random.h"
+#include "story_mode.h"
 #include "string_format.h"
 #include "strings.h"
 #include "dungeon_data.h"
@@ -2619,7 +2620,7 @@ u32 BufferDungeonRequirementsText(u8 dungeonIndex, s32 speciesId_, u8 *buffer, b
         }
     }
 
-    if (requireHm) {
+    if (requireHm && !StoryMode_IsDungeonSkipEnabled()) {
         s32 i;
         u16 movesNeeded[MAX_MON_MOVES] = {MOVE_FLY, MOVE_DIVE, MOVE_WATERFALL, MOVE_SURF};
         u8 hmsNeeded[MAX_MON_MOVES] = {ITEM_HM_FLY, ITEM_HM_DIVE, ITEM_HM_WATERFALL, ITEM_HM_SURF};
@@ -2641,7 +2642,7 @@ u32 BufferDungeonRequirementsText(u8 dungeonIndex, s32 speciesId_, u8 *buffer, b
         }
     }
 
-    if (gDungeons[dungeonIndex].HMMask & 0x10) {
+    if ((gDungeons[dungeonIndex].HMMask & 0x10) && !StoryMode_IsDungeonSkipEnabled()) {
         s32 otherSpeciesId = NUM_MONSTERS;
 
         if (speciesId != MONSTER_NONE && (GetPokemonType(speciesId,0) == TYPE_WATER || (GetPokemonType(speciesId,1) == TYPE_WATER))) {

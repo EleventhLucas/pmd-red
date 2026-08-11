@@ -20,6 +20,7 @@
 #include "text_1.h"
 #include "text_util.h"
 #include "pokemon_evolution.h"
+#include "story_mode.h"
 #include "unk_ds_only_feature.h"
 
 enum
@@ -498,8 +499,15 @@ static void sub_8024E9C(void)
         switch(menuAction)
         {
             case LUMINOUS_CAVE_EVOLVE:
-                if(LuminousCave_HasOnly1Member())
-                    UpdateLuminousCaveState(LUMINOUS_CAVE_GIVE_ITEM_1);
+                if(LuminousCave_HasOnly1Member()) {
+                    if (StoryMode_IsDungeonSkipEnabled()) {
+                        sLuminousCaveWork->evoItem1_InvIndex = INVENTORY_SIZE;
+                        sLuminousCaveWork->evoItem2_InvIndex = INVENTORY_SIZE;
+                        UpdateLuminousCaveState(LUMINOUS_CAVE_LET_US_BEGIN);
+                    }
+                    else
+                        UpdateLuminousCaveState(LUMINOUS_CAVE_GIVE_ITEM_1);
+                }
                 else
                     UpdateLuminousCaveState(LUMINOUS_CAVE_COME_ALONE);
                 break;
@@ -734,7 +742,10 @@ static void sub_8025254(void)
     }
 
     sLuminousCaveWork->evolveStatus.wurmpleVal = RandInt(0xFF);
-    SetMonEvolveStatus(sLuminousCaveWork->pokeStruct, &sLuminousCaveWork->evolveStatus, 1);
+    if (StoryMode_IsDungeonSkipEnabled())
+        SetMonEvolveStatusForced(sLuminousCaveWork->pokeStruct, &sLuminousCaveWork->evolveStatus);
+    else
+        SetMonEvolveStatus(sLuminousCaveWork->pokeStruct, &sLuminousCaveWork->evolveStatus, 1);
 }
 
 static bool8 LuminousCave_HasOnly1Member(void)

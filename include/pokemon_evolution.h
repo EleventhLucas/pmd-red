@@ -24,6 +24,7 @@ typedef struct EvolveStatus
 } EvolveStatus;
 
 void SetMonEvolveStatus(Pokemon *pokemon, EvolveStatus *evolveStatus,bool8 param_3);
+void SetMonEvolveStatusForced(Pokemon *pokemon, EvolveStatus *evolveStatus);
 s32 GetMonSummaryScreenEvoStringId(Pokemon *pokemon);
 Pokemon *sub_808F734(Pokemon *pokemon, s16 _species);
 Pokemon *sub_808F798(Pokemon *pokemon, s16 _species);

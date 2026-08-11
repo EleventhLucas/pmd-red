@@ -9,7 +9,7 @@
 #include "constants/evolve_type.h"
 #include "constants/evolution_status.h"
 
-void SetMonEvolveStatus(Pokemon *pokemon, EvolveStatus *evolveStatus, bool8 param_3)
+static void SetMonEvolveStatusInternal(Pokemon *pokemon, EvolveStatus *evolveStatus, bool8 param_3, bool8 ignoreRequirements)
 {
     struct FriendAreaCapacity friendAreaCapacity;
     struct unkEvolve evolveConditions;
@@ -60,104 +60,119 @@ void SetMonEvolveStatus(Pokemon *pokemon, EvolveStatus *evolveStatus, bool8 para
             }
          }
 
-        if (evolveConditions.preEvolution.evolveType == EVOLVE_TYPE_LEVEL) {
-            if (evolveStatus->evolutionConditionStatus & 1)
-                continue;
-            if (pokemon->level < evolveConditions.evolutionRequirements.mainRequirement) {
-                evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_LEVEL;
-                cannotEvolve = TRUE;
-            }
-        }
-        else if (evolveConditions.preEvolution.evolveType == EVOLVE_TYPE_IQ) {
-            if (pokemon->IQ < evolveConditions.evolutionRequirements.mainRequirement) {
-                evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_IQ;
-                cannotEvolve = TRUE;
-            }
-        }
-        else if (evolveConditions.preEvolution.evolveType == EVOLVE_TYPE_ITEM) {
-            if (param_3) {
-                if ((evolveStatus->evoItem1 != evolveConditions.evolutionRequirements.mainRequirement) &&
-                        (evolveStatus->evoItem2 != evolveConditions.evolutionRequirements.mainRequirement))
-                {
-                    evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
+        if (!ignoreRequirements) {
+            if (evolveConditions.preEvolution.evolveType == EVOLVE_TYPE_LEVEL) {
+                if (evolveStatus->evolutionConditionStatus & 1)
+                    continue;
+                if (pokemon->level < evolveConditions.evolutionRequirements.mainRequirement) {
+                    evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_LEVEL;
                     cannotEvolve = TRUE;
                 }
             }
-            else if (FindItemInInventory(evolveConditions.evolutionRequirements.mainRequirement) < 0) {
-                evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
-                cannotEvolve = TRUE;
-            }
-        }
-
-        if (evolveConditions.evolutionRequirements.additionalRequirement == 4) {
-            if (param_3) {
-                if ((evolveStatus->evoItem1 != ITEM_LINK_CABLE) && (evolveStatus->evoItem2 != ITEM_LINK_CABLE)) {
-                    evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
+            else if (evolveConditions.preEvolution.evolveType == EVOLVE_TYPE_IQ) {
+                if (pokemon->IQ < evolveConditions.evolutionRequirements.mainRequirement) {
+                    evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_IQ;
                     cannotEvolve = TRUE;
                 }
             }
-            else if (FindItemInInventory(ITEM_LINK_CABLE) < 0) {
-                evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
-                cannotEvolve = TRUE;
-            }
-        }
-        else if (evolveConditions.evolutionRequirements.additionalRequirement == 5) {
-            if (pokemon->offense.att[0] <= pokemon->offense.def[0]) {
-                cannotEvolve = TRUE;
-            }
-        }
-        else if (evolveConditions.evolutionRequirements.additionalRequirement == 6) {
-            if (pokemon->offense.att[0] >= pokemon->offense.def[0]) {
-                cannotEvolve = TRUE;
-            }
-        }
-        else if (evolveConditions.evolutionRequirements.additionalRequirement == 7) {
-            if (pokemon->offense.att[0] != pokemon->offense.def[0]) {
-                cannotEvolve = TRUE;
-            }
-        }
-        else if (evolveConditions.evolutionRequirements.additionalRequirement == 8) {
-            if (param_3) {
-                if ((evolveStatus->evoItem1 != ITEM_SUN_RIBBON) && (evolveStatus->evoItem2 != ITEM_SUN_RIBBON)) {
-                    evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
-                    cannotEvolve = TRUE;
-                }
-            }
-            else if (FindItemInInventory(ITEM_SUN_RIBBON) < 0) {
-                evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
-                cannotEvolve = TRUE;
-            }
-        }
-        else if (evolveConditions.evolutionRequirements.additionalRequirement == 9) {
+            else if (evolveConditions.preEvolution.evolveType == EVOLVE_TYPE_ITEM) {
                 if (param_3) {
-                    if ((evolveStatus->evoItem1 != ITEM_LUNAR_RIBBON) && (evolveStatus->evoItem2 != ITEM_LUNAR_RIBBON)) {
+                    if ((evolveStatus->evoItem1 != evolveConditions.evolutionRequirements.mainRequirement) &&
+                            (evolveStatus->evoItem2 != evolveConditions.evolutionRequirements.mainRequirement))
+                    {
                         evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
                         cannotEvolve = TRUE;
                     }
                 }
-                else if (FindItemInInventory(ITEM_LUNAR_RIBBON) < 0) {
+                else if (FindItemInInventory(evolveConditions.evolutionRequirements.mainRequirement) < 0) {
                     evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
                     cannotEvolve = TRUE;
                 }
-        }
-        else if (evolveConditions.evolutionRequirements.additionalRequirement == 0xb) {
-            if ((evolveStatus->wurmpleVal & 1)) {
-                cannotEvolve = TRUE;
             }
-        }
-        else if (evolveConditions.evolutionRequirements.additionalRequirement == 0xc) {
-            if (!(evolveStatus->wurmpleVal & 1)) {
-                cannotEvolve = TRUE;
-            }
-        }
-        else if (evolveConditions.evolutionRequirements.additionalRequirement == 10) {
-            if (param_3 != 0) {
-                if ((evolveStatus->evoItem1 != ITEM_BEAUTY_SCARF) && (evolveStatus->evoItem2 != ITEM_BEAUTY_SCARF)) {
+
+            if (evolveConditions.evolutionRequirements.additionalRequirement == 4) {
+                if (param_3) {
+                    if ((evolveStatus->evoItem1 != ITEM_LINK_CABLE) && (evolveStatus->evoItem2 != ITEM_LINK_CABLE)) {
+                        evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
+                        cannotEvolve = TRUE;
+                    }
+                }
+                else if (FindItemInInventory(ITEM_LINK_CABLE) < 0) {
+                    evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
                     cannotEvolve = TRUE;
                 }
             }
-            else {
-                if (FindItemInInventory(ITEM_BEAUTY_SCARF) < 0) {
+            else if (evolveConditions.evolutionRequirements.additionalRequirement == 5) {
+                if (pokemon->offense.att[0] <= pokemon->offense.def[0]) {
+                    cannotEvolve = TRUE;
+                }
+            }
+            else if (evolveConditions.evolutionRequirements.additionalRequirement == 6) {
+                if (pokemon->offense.att[0] >= pokemon->offense.def[0]) {
+                    cannotEvolve = TRUE;
+                }
+            }
+            else if (evolveConditions.evolutionRequirements.additionalRequirement == 7) {
+                if (pokemon->offense.att[0] != pokemon->offense.def[0]) {
+                    cannotEvolve = TRUE;
+                }
+            }
+            else if (evolveConditions.evolutionRequirements.additionalRequirement == 8) {
+                if (param_3) {
+                    if ((evolveStatus->evoItem1 != ITEM_SUN_RIBBON) && (evolveStatus->evoItem2 != ITEM_SUN_RIBBON)) {
+                        evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
+                        cannotEvolve = TRUE;
+                    }
+                }
+                else if (FindItemInInventory(ITEM_SUN_RIBBON) < 0) {
+                    evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
+                    cannotEvolve = TRUE;
+                }
+            }
+            else if (evolveConditions.evolutionRequirements.additionalRequirement == 9) {
+                    if (param_3) {
+                        if ((evolveStatus->evoItem1 != ITEM_LUNAR_RIBBON) && (evolveStatus->evoItem2 != ITEM_LUNAR_RIBBON)) {
+                            evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
+                            cannotEvolve = TRUE;
+                        }
+                    }
+                    else if (FindItemInInventory(ITEM_LUNAR_RIBBON) < 0) {
+                        evolveStatus->evolutionConditionStatus |= EVOLUTION_LACK_ITEM;
+                        cannotEvolve = TRUE;
+                    }
+            }
+            else if (evolveConditions.evolutionRequirements.additionalRequirement == 0xb) {
+                if ((evolveStatus->wurmpleVal & 1)) {
+                    cannotEvolve = TRUE;
+                }
+            }
+            else if (evolveConditions.evolutionRequirements.additionalRequirement == 0xc) {
+                if (!(evolveStatus->wurmpleVal & 1)) {
+                    cannotEvolve = TRUE;
+                }
+            }
+            else if (evolveConditions.evolutionRequirements.additionalRequirement == 10) {
+                if (param_3 != 0) {
+                    if ((evolveStatus->evoItem1 != ITEM_BEAUTY_SCARF) && (evolveStatus->evoItem2 != ITEM_BEAUTY_SCARF)) {
+                        cannotEvolve = TRUE;
+                    }
+                }
+                else {
+                    if (FindItemInInventory(ITEM_BEAUTY_SCARF) < 0) {
+                        cannotEvolve = TRUE;
+                    }
+                }
+            }
+        }
+        else {
+            // Preserve Wurmple's random branch; it chooses a result rather than gating evolution.
+            if (evolveConditions.evolutionRequirements.additionalRequirement == 0xb) {
+                if ((evolveStatus->wurmpleVal & 1)) {
+                    cannotEvolve = TRUE;
+                }
+            }
+            else if (evolveConditions.evolutionRequirements.additionalRequirement == 0xc) {
+                if (!(evolveStatus->wurmpleVal & 1)) {
                     cannotEvolve = TRUE;
                 }
             }
@@ -166,8 +181,21 @@ void SetMonEvolveStatus(Pokemon *pokemon, EvolveStatus *evolveStatus, bool8 para
         if (!cannotEvolve) {
             evolveStatus->evolutionConditionStatus |= EVOLUTION_GOOD;
             evolveStatus->targetEvolveSpecies = speciesId;
+            if (ignoreRequirements) {
+                break;
+            }
         }
     }
+}
+
+void SetMonEvolveStatus(Pokemon *pokemon, EvolveStatus *evolveStatus, bool8 param_3)
+{
+    SetMonEvolveStatusInternal(pokemon, evolveStatus, param_3, FALSE);
+}
+
+void SetMonEvolveStatusForced(Pokemon *pokemon, EvolveStatus *evolveStatus)
+{
+    SetMonEvolveStatusInternal(pokemon, evolveStatus, TRUE, TRUE);
 }
 
 s32 GetMonSummaryScreenEvoStringId(Pokemon *pokemon)
