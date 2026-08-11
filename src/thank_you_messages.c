@@ -199,10 +199,14 @@ static void TYM_InitStateDialogue(void)
             break;
         }
         case TYM_STATE_4: {
-            s32 index = FindItemInInventory(sTYMWork->jobInfo->targetItem);
-            if (index != -1) {
-                ShiftItemsDownFrom(index);
-                FillInventoryGaps();
+            // Auto-completed find-item jobs are already in the completed state and
+            // should not consume an item the player happens to be carrying.
+            if (sTYMWork->jobInfo->mailType == MAIL_TYPE_TAKEN_JOB) {
+                s32 index = FindItemInInventory(sTYMWork->jobInfo->targetItem);
+                if (index != -1) {
+                    ShiftItemsDownFrom(index);
+                    FillInventoryGaps();
+                }
             }
             CreateDialogueBoxAndPortrait(sThanksForGetting, 0, &sTYMWork->monPortrait, 0x10D);
             break;

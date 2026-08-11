@@ -1078,7 +1078,10 @@ void sub_8096AF8(struct unkStruct_8096AF8 *param_1, u8 slotIndex,u8 dungeon)
   if (jobSlot->dungeonSeed.location.id == dungeon) {
     switch(jobSlot->missionType) {
         case WONDER_MAIL_MISSION_TYPE_FIND_ITEM:
-            if (jobSlot->mailType == MAIL_TYPE_TAKEN_JOB) {
+            if (jobSlot->mailType == MAIL_TYPE_UNK9) {
+                param_1->unk0 = TRUE;
+            }
+            else if (jobSlot->mailType == MAIL_TYPE_TAKEN_JOB) {
                 for(index = 0; index < INVENTORY_SIZE; index++)
                 {
                     item = &gTeamInventoryRef->teamItems[index];

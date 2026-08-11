@@ -36,6 +36,7 @@
 #include "rescue_team_info.h"
 #include "save.h"
 #include "string_format.h"
+#include "story_mode.h"
 #include "text_util.h"
 #include "pokemon.h"
 #include "wigglytuff_shop1.h"
@@ -2966,7 +2967,8 @@ static s32 ExecuteScriptCommand(Action *action)
                 break;
             }
             case CMD_BYTE_BF: {
-                if (HasItemInInventory(curCmd.argShort) > 0)
+                if (HasItemInInventory(curCmd.argShort) > 0
+                    || StoryMode_ShouldBypassItemCheck(curCmd.argShort))
                     scriptData->script.ptr = FindLabel(action, (u8)curCmd.argByte);
 
                 break;
