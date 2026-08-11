@@ -1103,6 +1103,12 @@ static u32 xxx_script_related_8001334_Async(u32 startMode)
 static void LoadAndRunDungeon_Async(DungeonSetupStruct *setupPtr)
 {
     nullsub_2(setupPtr);
+    if (StoryMode_PrepareSceneDungeon(setupPtr)) {
+        RunDungeon_Async(setupPtr);
+        NDS_LoadOverlay_GroundMain();
+        return;
+    }
+
     if (StoryMode_ShouldSkipDungeon(setupPtr)) {
         StoryMode_CompleteSkippedDungeon(setupPtr);
         return;

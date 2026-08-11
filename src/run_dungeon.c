@@ -49,6 +49,7 @@
 #include "pokemon.h"
 #include "random.h"
 #include "sprite.h"
+#include "story_mode.h"
 #include "text_1.h"
 #include "text_3.h"
 #include "weather.h"
@@ -418,7 +419,10 @@ void RunDungeon_Async(DungeonSetupStruct *setupPtr)
         gDungeon->unk5 = 0;
         if (!r6) {
             DisplayPreFightDialogue();
-            if (gDungeon->unk4 != 0 || gDungeon->unk2 != DUNGEON_UNK2_0) {
+            if (StoryMode_ShouldAutoAdvanceSceneFloor(gDungeon->unk644.dungeonLocation.id, gDungeon->cutscene)) {
+                gDungeon->unk5 = 1;
+            }
+            else if (gDungeon->unk4 != 0 || gDungeon->unk2 != DUNGEON_UNK2_0) {
                 gDungeon->unk5 = 1;
             }
             else {
