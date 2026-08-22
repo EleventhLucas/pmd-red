@@ -32,6 +32,9 @@ of the instant skip. `StoryMode_PrepareSceneDungeon` moves the start location to
 the destination floor, lets the dungeon engine show fixed-room staging and
 pre-fight dialogue, then `StoryMode_ShouldAutoAdvanceSceneFloor` skips the
 playable turn loop so the run advances or clears immediately afterward.
+Generic dungeon-control tutorials are suppressed during this staging without
+setting their tutorial flags, while the endpoint's pre-fight dialogue still
+plays normally.
 
 Accepted jobs in these dungeons are completed when the endpoint scene is
 prepared, matching the instant skip path. This prevents scene-preserving

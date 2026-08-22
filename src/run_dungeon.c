@@ -408,7 +408,9 @@ void RunDungeon_Async(DungeonSetupStruct *setupPtr)
         gDungeon->unk0 = 1;
 
         if (!r6) {
-            TryDisplayGeneralTutorialMessage();
+            if (!StoryMode_ShouldSuppressDungeonTutorials()) {
+                TryDisplayGeneralTutorialMessage();
+            }
             if (gDungeon->unk9 != 0) {
                 gDungeon->unk9 = 0;
                 sub_8083D68();

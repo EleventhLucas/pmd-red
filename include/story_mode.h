@@ -9,6 +9,7 @@ void StoryMode_ToggleDungeonSkip(void);
 bool8 StoryMode_ShouldBypassItemCheck(u8 itemId);
 bool8 StoryMode_ShouldSkipDungeon(const DungeonSetupStruct *setupPtr);
 bool8 StoryMode_PrepareSceneDungeon(DungeonSetupStruct *setupPtr);
+bool8 StoryMode_ShouldSuppressDungeonTutorials(void);
 bool8 StoryMode_ShouldAutoAdvanceSceneFloor(u8 dungeonId, u8 cutscene);
 void StoryMode_CompleteSkippedDungeon(DungeonSetupStruct *setupPtr);
 

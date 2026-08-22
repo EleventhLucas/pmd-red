@@ -123,6 +123,11 @@ bool8 StoryMode_PrepareSceneDungeon(DungeonSetupStruct *setupPtr)
     return FALSE;
 }
 
+bool8 StoryMode_ShouldSuppressDungeonTutorials(void)
+{
+    return sStoryModeSceneDungeonActive;
+}
+
 bool8 StoryMode_ShouldAutoAdvanceSceneFloor(u8 dungeonId, u8 cutscene)
 {
     DungeonLocation location;
