@@ -33,6 +33,10 @@ the destination floor, lets the dungeon engine show fixed-room staging and
 pre-fight dialogue, then `StoryMode_ShouldAutoAdvanceSceneFloor` skips the
 playable turn loop so the run advances or clears immediately afterward.
 
+Accepted jobs in these dungeons are completed when the endpoint scene is
+prepared, matching the instant skip path. This prevents scene-preserving
+dungeons from leaving jobs stuck in the accepted state.
+
 Currently preserved endpoints:
 
 - Mt. Steel 9F.

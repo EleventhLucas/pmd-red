@@ -114,6 +114,7 @@ bool8 StoryMode_PrepareSceneDungeon(DungeonSetupStruct *setupPtr)
         return FALSE;
 
     if (GetSceneDungeonLocation(setupPtr->info.sub0.unk0.id, &location)) {
+        CompleteTakenJobsInDungeon(setupPtr->info.sub0.unk0.id);
         setupPtr->info.sub0.unk0 = location;
         sStoryModeSceneDungeonActive = TRUE;
         return TRUE;
